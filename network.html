@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+/* style here */
+
+</style>
+
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+// Get our data ready
+queue()
+    .defer(d3.json, "/d/world-50m.json")
+    .defer(d3.csv, "/d/interdisciplinary.csv")
+    .await(ready);
+
+var w = 1280,
+    h = 800,
+    node,
+    link;
+
+var force = d3.layout.force()
+    .charge(-120)
+    .linkDistance(30)
+    .size([w, h - 160]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.csv("/d/interdisciplinary.csv", function(error, graph) {
+
+  force
+    .nodes(graph.nodes)
+    .links(graph.links)
+    .start();
+
+  var link = svg.selectAll(".link")
+      .data(graph.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+});
+
+</script>
+
+</body>
+</html>

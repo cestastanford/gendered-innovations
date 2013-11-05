@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Raleway:400,200' rel='stylesheet' type='text/css'>
+
+<style>
+
+body {
+    display: block;
+    margin: 0 auto;
+    font-family: 'PT Sans','Helvetica Neue',sans-serif;
+    color: white;
+    background: #B431F4;
+    font-size: 18px;
+}
+
+p {
+    width: 960px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+section {
+    display: block;
+}
+
+section .description {
+    width: 100%;
+    display: block;
+    background-color: #fafafa;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+svg {
+    background: #B431F4;
+    display: block;
+    margin: 0 auto;
+}
+
+.points {
+  stroke: none;
+  stroke-width: 1;
+ }
+
+.points text {
+  font: 11px sans-serif;
+  text-anchor: middle;
+}
+
+.stroke {
+  fill: none;
+  stroke: none;
+  stroke-width: 3px;
+}
+
+.fill {
+  fill: #B431F4;
+}
+
+.graticule {
+  fill: none;
+  stroke: none;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+
+.land {
+  fill: #9B18DB;
+}
+
+.boundary {
+  fill: none;
+  stroke: #9B18DB;
+  stroke-width: .5px;
+}
+
+h1 {
+    color: #5BE5FF;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 200;
+    font-family: 'Raleway', sans-serif;
+    font-size: 38px;
+}
+
+</style>
+
+<body>
+<script src="./d/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+<script src="./d/d3.queue.v1.min.js"></script>
+<script src="./d/topojson.v1.min.js"></script>
+
+<section style="background-color: #B431F4; width: 100%; padding-top: 50px;">
+
+    <div>
+        <h1>Gendered Innovations</h1>
+    </div>
+
+<script>
+
+// Get our data ready
+queue()
+    .defer(d3.json, "/d/world-50m.json")
+    .defer(d3.csv, "/d/interdisciplinary.csv")
+    .await(ready);
+
+// ===================== Global variables ===================== 
+
+var width = 1200,
+    height = 450,
+    Female = "#FF74B0",
+    Male = "#4E86FF";
+
+// ===================== Map variables ===================== 
+
+var projection = d3.geo.eckert3()
+    .translate([width / 2, height / 2])
+    .rotate([50, 0])
+    .center([0, 40])
+    .scale(550);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var graticule = d3.geo.graticule();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("defs").append("path")
+    .datum({type: "Sphere"})
+    .attr("id", "sphere")
+    .attr("d", path);
+
+svg.append("use")
+    .attr("class", "stroke")
+    .attr("xlink:href", "#sphere");
+
+svg.append("use")
+    .attr("class", "fill")
+    .attr("xlink:href", "#sphere");
+
+svg.append("path")
+    .datum(graticule)
+    .attr("class", "graticule")
+    .attr("d", path);
+
+function ready(error, world, home_points) {
+
+  home_points.forEach(function (d, i) {
+    d.index = i;
+    d.name = d["name"];
+    d.gender = d["sex"];
+    d.h_lat = d["home_latitude"];
+    d.h_long = d["home_longitude"];
+  });
+
+  svg.insert("path", ".graticule")
+      .datum(topojson.feature(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+
+  svg.insert("path", ".graticule")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .attr("class", "boundary")
+      .attr("d", path);
+
+  svg.selectAll("circles.points")
+    .data(home_points)
+  .enter().append("circle")
+    .attr("r", 3)
+    .attr("class", "points")
+    .style("fill", function(d, i) { if (d.gender == "F") { return Female; } else if (d.gender == "M" ) { return Male; } })
+    .attr("transform", function(d) { return "translate(" + projection([d.h_long, d.h_lat]) + ")"; })
+    //console.log(home_points);
+
+
+};
+
+d3.select(self.frameElement).style("height", height + "px");
+
+</script>
+
+</section>
+
+<section class="description">
+<p>The Gendered Innovations project is international, consisting of a network of 69 contributors across 38 countries.</p>
+</section>
+
+</body>
+</html>
