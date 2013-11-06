@@ -6,12 +6,20 @@
 
 <style>
 
+/*
+dk blue: #30394F
+red: #ff434c
+lt blue: #6aceeb
+gray: #ede8df
+white: #fffbed
+*/
+
 body {
     display: block;
     margin: 0 auto;
     font-family: 'PT Sans','Helvetica Neue',sans-serif;
-    color: white;
-    background: #B431F4;
+    color: #30394F;
+    background: #EDE8DF;
     font-size: 18px;
 }
 
@@ -37,14 +45,15 @@ section .description {
 }
 
 svg {
-    background: #B431F4;
+    background: #EDE8DF;
     display: block;
     margin: 0 auto;
 }
 
 .points {
-  stroke: none;
+  stroke: #5E709B;
   stroke-width: 1;
+  opacity: .8;
  }
 
 .points text {
@@ -59,65 +68,135 @@ svg {
 }
 
 .fill {
-  fill: #B431F4;
+  fill: #EDE8DF;
 }
 
-.graticule {
-  fill: none;
-  stroke: none;
-  stroke-width: .5px;
-  stroke-opacity: .5;
-}
-
-.land {
-  fill: #9B18DB;
-}
-
-.boundary {
-  fill: none;
-  stroke: #9B18DB;
-  stroke-width: .5px;
+.background {
+  fill: #EDE8DF;
 }
 
 h1 {
-    color: #5BE5FF;
+    color: #30394F;
     text-align: center;
     margin-bottom: 20px;
     font-weight: 200;
     font-family: 'Raleway', sans-serif;
-    font-size: 38px;
+    font-size: 48px;
+}
+
+rect {
+  fill: none;
+  pointer-events: all;
+}
+
+.feature {
+  fill: #FFFBED;
+  cursor: pointer;
+}
+
+.feature.active {
+  fill: orange;
+}
+
+.mesh {
+  fill: none;
+  stroke: #EDE8DF;
+  stroke-width: .5px;
+  stroke-linejoin: round;
+}
+
+#nav {
+    color: #BFBCB2;
+    margin: 7em 0 0 0;
+    text-align: center;
+    text-transform: none;
+    letter-spacing: 1px;
+    font-size: 0.75em;
+    line-height: 2px;
+}
+
+#nav ul {
+  list-style: none;
+  margin: 10;
+  padding: 10;
+}
+
+#nav ul li {
+  display: inline;
+}
+
+#nav ul li:not(:first-child):before {
+  color: #BFBCB2;
+  content: " · ";
+  padding: 0 4px;
+}
+
+#about {
+    color: #BFBCB2;
+    margin: 7em 0 0 0;
+    text-align: right;
+    text-transform: none;
+    letter-spacing: 1px;
+    font-size: 0.75em;
+    line-height: 2px;
+}
+
+#about ul {
+  list-style: none;
+  margin: 10;
+  padding: 10;
+}
+
+#about ul li {
+  display: inline;
+}
+
+#about ul li:not(:first-child):before {
+  color: #BFBCB2;
+  content: " · ";
+  padding: 0 4px;
 }
 
 </style>
 
 <body>
+
 <script src="./d/d3.v3.min.js"></script>
 <script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
 <script src="./d/d3.queue.v1.min.js"></script>
 <script src="./d/topojson.v1.min.js"></script>
 
-<section style="background-color: #B431F4; width: 100%; padding-top: 50px;">
+<section style="background-color: #EDE8DF; width: 100%; padding-top: 50px;">
 
     <div>
         <h1>Gendered Innovations</h1>
     </div>
 
+<!--     <div id="nav">
+      <ul>
+        <li>Gender and Home Institution</li>
+        <li>Interdisciplinary of Workshops</li>
+      </ul>
+    </div> -->
+
 <script>
 
-// Get our data ready
-queue()
-    .defer(d3.json, "/d/world-50m.json")
-    .defer(d3.csv, "/d/interdisciplinary.csv")
-    .await(ready);
-
-// ===================== Global variables ===================== 
+// ========================== Global variables ========================== 
 
 var width = 1200,
     height = 450,
-    Female = "#FF74B0",
-    Male = "#4E86FF";
+    Female = "#ff434c",
+    Male = "#6aceeb";
 
-// ===================== Map variables ===================== 
+// ========================= Get our data ready ========================= 
+
+queue()
+    .defer(d3.json, "/d/world-50m.json")
+    .defer(d3.csv, "/d/interdisciplinary.csv")
+    //.defer(d3.csv, "/d/network.csv")
+    .await(ready);
+
+// ========================== Map variables ========================== 
 
 var projection = d3.geo.eckert3()
     .translate([width / 2, height / 2])
@@ -128,29 +207,20 @@ var projection = d3.geo.eckert3()
 var path = d3.geo.path()
     .projection(projection);
 
-var graticule = d3.geo.graticule();
-
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-svg.append("defs").append("path")
-    .datum({type: "Sphere"})
-    .attr("id", "sphere")
-    .attr("d", path);
+// ========================== Prepare canvas ========================== 
 
-svg.append("use")
-    .attr("class", "stroke")
-    .attr("xlink:href", "#sphere");
+svg.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .on("click", reset);
 
-svg.append("use")
-    .attr("class", "fill")
-    .attr("xlink:href", "#sphere");
+var g = svg.append("g");
 
-svg.append("path")
-    .datum(graticule)
-    .attr("class", "graticule")
-    .attr("d", path);
+// ========================== Binding data ========================== 
 
 function ready(error, world, home_points) {
 
@@ -162,29 +232,48 @@ function ready(error, world, home_points) {
     d.h_long = d["home_longitude"];
   });
 
-  svg.insert("path", ".graticule")
-      .datum(topojson.feature(world, world.objects.land))
-      .attr("class", "land")
-      .attr("d", path);
+  g.selectAll("path")
+      .data(topojson.feature(world, world.objects.countries).features)
+    .enter().append("path")
+      .attr("d", path)
+      .attr("class", "feature")
+      .on("click", click);
 
-  svg.insert("path", ".graticule")
+  g.append("path")
       .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
-      .attr("class", "boundary")
+      .attr("class", "mesh")
       .attr("d", path);
 
-  svg.selectAll("circles.points")
+  g.selectAll("circles.points")
     .data(home_points)
   .enter().append("circle")
     .attr("r", 3)
     .attr("class", "points")
-    .style("fill", function(d, i) { if (d.gender == "F") { return Female; } else if (d.gender == "M" ) { return Male; } })
-    .attr("transform", function(d) { return "translate(" + projection([d.h_long, d.h_lat]) + ")"; })
+    .style("fill", function(d, i) { if (d.gender === "F") { return Female; } else if (d.gender === "M" ) { return Male; } })
+    .attr("transform", function(d) { return "translate(" + projection([d.h_long, d.h_lat]) + ")"; });
     //console.log(home_points);
-
 
 };
 
-d3.select(self.frameElement).style("height", height + "px");
+// ========================== Functions ==========================
+
+// Zooming function, click-to-zoom
+function click(d) {
+  if (active === d) return reset();
+  g.selectAll(".active").classed("active", false);
+  d3.select(this).classed("active", active = d);
+
+  var b = path.bounds(d);
+  g.transition().duration(750).attr("transform",
+      "translate(" + projection.translate() + ")"
+      + "scale(" + .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height) + ")"
+      + "translate(" + -(b[1][0] + b[0][0]) / 2 + "," + -(b[1][1] + b[0][1]) / 2 + ")");
+}
+
+function reset() {
+  g.selectAll(".active").classed("active", active = false);
+  g.transition().duration(750).attr("transform", "");
+}
 
 </script>
 
@@ -193,6 +282,14 @@ d3.select(self.frameElement).style("height", height + "px");
 <section class="description">
 <p>The Gendered Innovations project is international, consisting of a network of 69 contributors across 38 countries.</p>
 </section>
+
+<div id="about">
+  <ul>
+    <li>Londa Schiebinger</li>
+    <li>Stanford University</li>
+    <li>Visualized by Jason A. Heppler</li>
+  </ul>
+</div>
 
 </body>
 </html>
