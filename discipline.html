@@ -260,20 +260,90 @@ d3.csv("./d/network.csv", function(error, csv_data) {
   // ========================== Starting the network ========================== 
 
   // array of nodes
-  var nodes = {};
+  nodes = {};
+
+    links = csv_data;
+    newLinks = [];
 
   // compute nodes from links
   csv_data.forEach(function(link) {
-      link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
-      link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+    link.visible = true;
+    link.weight = 0;
+
+//    link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, visible: true});
+//    link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, visible: true});
+
+//////PLACES
+/*
+    link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, visible: true});
+
+    for (x in links) {
+      if (links[x].target == link.target && links[x].source != link.source) {
+        link.target = nodes[links[x].source] || (nodes[links[x].source] = {name: links[x].source, visible: true});
+        var newEdge = {source: link.source, target: link.target, visible: true, weight: 1};
+
+        var edgeFound = false;
+        var tempEdge = {};
+        for (y in newLinks) {
+          if (newLinks[y].source == newEdge.source && newLinks[y].target == newEdge.target) {
+            edgeFound = true;
+            tempEdge = newLinks[y];
+            break;
+          }
+        }
+
+        if (edgeFound) {
+          tempEdge.weight++;
+        }
+        else {
+        newLinks.push(newEdge);
+      }
+
+
+      }
+    }
+    */
+
+//////DISCIPLINES
+
+    link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, visible: true});
+
+    for (x in links) {
+      if (links[x].source == link.source && links[x].target != link.target) {
+        link.source = nodes[links[x].target] || (nodes[links[x].target] = {name: links[x].target, visible: true});
+        var newEdge = {target: link.target, source: link.source, visible: true, weight: 1};
+
+        var edgeFound = false;
+        var tempEdge = {};
+        for (y in newLinks) {
+          if (newLinks[y].target == newEdge.target && newLinks[y].source == newEdge.source) {
+            edgeFound = true;
+            tempEdge = newLinks[y];
+            break;
+          }
+        }
+
+        if (edgeFound) {
+          tempEdge.weight++;
+        }
+        else {
+        newLinks.push(newEdge);
+      }
+
+
+      }
+    }
+
   });
 
-  var force = d3.layout.force()
+  force = d3.layout.force()
     .nodes(d3.values(nodes))
-    .links(csv_data)
+    .links(newLinks)
+//    .links(csv_data)
     .size([width, height])
-    .linkDistance(60)
-    .charge(-900)
+    .linkDistance(20)
+    .linkStrength(function(d) {return d.weight * 1})
+    .charge(function(d) {return d.visible ? -900 : -1800})
     .on("tick", tick)
     .start();
 
@@ -285,6 +355,7 @@ d3.csv("./d/network.csv", function(error, csv_data) {
   var path = svg.append("g").selectAll("path")
     .data(force.links())
   .enter().append("path")
+  .style("stroke-width", function(d) {return d.weight})
     .attr("class", "link");
 
   // define the nodes
@@ -294,6 +365,7 @@ d3.csv("./d/network.csv", function(error, csv_data) {
     .attr("class", "node")
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
+    .on("click", egoNetwork)
     .call(force.drag);
 
   // add the nodes
@@ -349,6 +421,15 @@ d3.csv("./d/network.csv", function(error, csv_data) {
         .attr("r", 5);
   }
 });
+
+function egoNetwork(d,i) {
+  force.stop();
+  d3.selectAll("path.link").each(function(p,q) { p.source == d || p.target == d ? p.visible = true : p.visible = false})
+
+  d3.selectAll("g.node").each(function(p,q) { p == d ? p.visible = true : p.visible = false})
+
+  force.start();
+}
 
 </script>
 

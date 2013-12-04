@@ -178,8 +178,8 @@ rect {
 
     <div id="nav">
       <ul>
-        <li><a href="world.html">Gender and Home Institution</a></li>
-        <li><a href="discipline.html">Interdisciplinarity of Workshops</a></li>
+        <li><a href="index.html">Gender and Home Institution</a></li>
+        <li><a href="interdiscipline.html">Interdisciplinarity of Workshops</a></li>
         <li><a href="network.html">Workshop Networks</a></li>
       </ul>
     </div>
@@ -256,7 +256,6 @@ function ready(error, world, home_points) {
     .attr("class", "points")
     .style("fill", function(d, i) { if (d.gender === "F") { return Female; } else if (d.gender === "M" ) { return Male; } })
     .attr("transform", function(d) { return "translate(" + projection([d.h_long, d.h_lat]) + ")"; });
-    //console.log(home_points);
 
 };
 
