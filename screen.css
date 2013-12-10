@@ -13,6 +13,7 @@ body {
     color: #30394F;
     background: #CBCECF;
     font-size: 18px;
+    min-height: 900px;
 }
 
 p {
@@ -33,6 +34,13 @@ section .description {
     width: 100%;
     display: block;
     background-color: #fafafa;
+}
+
+.multiple {
+  display: block;
+  float: left;
+  padding: 15px;
+  margin: 15px;
 }
 
 .container {
@@ -151,6 +159,17 @@ rect {
   color: #BFBCB2;
   content: " · ";
   padding: 0 4px;
+}
+
+.home-arcs {
+  display: none;
+  fill: none;
+  stroke: #000;
+}
+
+.home-cell {
+  fill: none;
+  pointer-events: all;
 }
 
 /* Network styling */

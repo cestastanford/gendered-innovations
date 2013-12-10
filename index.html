@@ -10,7 +10,7 @@
 <body>
 
 <script src="./d/d3.v3.min.js"></script>
-<script src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
+<script src="http://d3js.org/d3.geo.projection.v0.min.js" charset="utf-8"></script>
 <script src="./d/d3.queue.v1.min.js"></script>
 <script src="./d/topojson.v1.min.js"></script>
 
@@ -33,15 +33,16 @@
 
 var width = 1200,
     height = 450,
+    centered,
+    active,
     Female = "#ff434c",
     Male = "#6aceeb";
 
 // ========================= Get our data ready ========================= 
 
 queue()
-    .defer(d3.json, "/d/world-50m.json")
-    .defer(d3.csv, "/d/interdisciplinary.csv")
-    //.defer(d3.csv, "/d/network.csv")
+    .defer(d3.json, "d/world-50m.json")
+    .defer(d3.csv, "d/interdisciplinary.csv")
     .await(ready);
 
 // ========================== Map variables ========================== 
@@ -59,12 +60,17 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
+var voronoi = d3.geom.voronoi()
+    .x(function(d) { return d.x; })
+    .y(function(d) { return d.y; })
+    .clipExtent([[0, 0], [width, height]]);
+
 // ========================== Prepare canvas ========================== 
 
 svg.append("rect")
     .attr("width", width)
     .attr("height", height)
-    .on("click", reset);
+   .on("click", reset);
 
 var g = svg.append("g");
 
@@ -85,7 +91,7 @@ function ready(error, world, home_points) {
     .enter().append("path")
       .attr("d", path)
       .attr("class", "feature")
-      .on("click", click);
+      .on("click", clicked);
 
   g.append("path")
       .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
@@ -100,12 +106,13 @@ function ready(error, world, home_points) {
     .style("fill", function(d, i) { if (d.gender === "F") { return Female; } else if (d.gender === "M" ) { return Male; } })
     .attr("transform", function(d) { return "translate(" + projection([d.h_long, d.h_lat]) + ")"; });
 
+
 };
 
 // ========================== Functions ==========================
 
 // Zooming function, click-to-zoom
-function click(d) {
+function clicked(d) {
   if (active === d) return reset();
   g.selectAll(".active").classed("active", false);
   d3.select(this).classed("active", active = d);
@@ -115,12 +122,31 @@ function click(d) {
       "translate(" + projection.translate() + ")"
       + "scale(" + .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height) + ")"
       + "translate(" + -(b[1][0] + b[0][0]) / 2 + "," + -(b[1][1] + b[0][1]) / 2 + ")");
+
 }
 
 function reset() {
   g.selectAll(".active").classed("active", active = false);
   g.transition().duration(750).attr("transform", "");
 }
+
+// old zoom -- this zooms to the country bounding area
+//function click(d) {
+//  if (active === d) return reset();
+//  g.selectAll(".active").classed("active", false);
+//  d3.select(this).classed("active", active = d);
+
+//  var b = path.bounds(d);
+//  g.transition().duration(750).attr("transform",
+//      "translate(" + projection.translate() + ")"
+//      + "scale(" + .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height) + ")"
+//      + "translate(" + -(b[1][0] + b[0][0]) / 2 + "," + -(b[1][1] + b[0][1]) / 2 + ")");
+//}
+
+//function reset() {
+//  g.selectAll(".active").classed("active", active = false);
+//  g.transition().duration(750).attr("transform", "");
+//}
 
 </script>
 
