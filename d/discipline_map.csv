@@ -1,0 +1,104 @@
+source,target,value,groupsource,grouptarget
+"Berlin, Germany","Architecture and Urban Planning",1,1,2
+"Berlin, Germany","Human-Computer Interaction",1,1,2
+"Berlin, Germany","Informatics",1,1,2
+"Berlin, Germany","Sociology",1,1,2
+"Berlin, Germany","Sociology and Social Policy",1,1,2
+"Berlin, Germany","Informatics",1,1,2
+"Berlin, Germany","Industrial Design",1,1,2
+"Berlin, Germany","Engineering",1,1,2
+"Brussels, Belgium","Medicine",1,1,3
+"Brussels, Belgium","Sociology",1,1,3
+"Brussels, Belgium","Engineering",1,1,3
+"Brussels, Belgium","Genetics",1,1,3
+"Brussels, Belgium","Science, Technology, and Society",1,1,3
+"Brussels, Belgium","Urban Planning",1,1,3
+"Brussels, Belgium","Gender and Neuroscience",1,1,3
+"Brussels, Belgium","Informatics",1,1,3
+"Cambridge, MA","Computer Science",1,1,4
+"Cambridge, MA","Physics",1,1,4
+"Cambridge, MA","Physics",1,1,4
+"Cambridge, MA","Computer Science",1,1,4
+"Cambridge, MA","Google Research",1,1,4
+"Cambridge, MA","Linguistics",1,1,4
+"Cambridge, MA","Pharmacology",1,1,4
+"Cambridge, MA","History of Science",1,1,4
+"Cambridge, MA","Biology",1,1,4
+"Cambridge, MA","Computer Science",1,1,4
+"Cambridge, MA","Neurobiology",1,1,4
+"Cambridge, MA","Chemistry",1,1,4
+"Maastricht, Netherlands","Microbiology",1,1,5
+"Maastricht, Netherlands","Genetics",1,1,5
+"Maastricht, Netherlands","Orthopedic Surgery",1,1,5
+"Maastricht, Netherlands","Biomedicine",1,1,5
+"Maastricht, Netherlands","Genetics",1,1,5
+"Maastricht, Netherlands","Neuroscience",1,1,5
+"Maastricht, Netherlands","Biology",1,1,5
+"Maastricht, Netherlands","Mechanical Engineering",1,1,5
+"Maastricht, Netherlands","Microbiology",1,1,5
+"Madrid, Spain","Environmental Sciences",1,1,6
+"Madrid, Spain","Environmental Sciences",1,1,6
+"Madrid, Spain","Endocrinology",1,1,6
+"Madrid, Spain","Sociology",1,1,6
+"Madrid, Spain","Environmental Planning",1,1,6
+"Madrid, Spain","Medicine",1,1,6
+"Madrid, Spain","Architecture",1,1,6
+"Paris, France","Robotics",1,1,7
+"Paris, France","Mechanical Engineering",1,1,7
+"Paris, France","Psychology and Gender Medicine",1,1,7
+"Paris, France","Gender Research",1,1,7
+"Paris, France","Human-Machine Interface",1,1,7
+"Stanford, CA","History of Science",1,1,8
+"Stanford, CA","Gender Medicine",1,1,8
+"Stanford, CA","Gender and Diversity in Organizations",1,1,8
+"Stanford, CA","Biomedical Ethics",1,1,8
+"Stanford, CA","Statistics",1,1,8
+"Stanford, CA","Philosophy",1,1,8
+"Stanford, CA","Physiology",1,1,8
+"Stanford, CA","Medicine",1,1,8
+"Stanford, CA","Cardiology",1,1,8
+"Stanford, CA","Regenerative Medicine",1,1,8
+"Stanford, CA","Orthopedic Surgery",1,1,8
+"Stanford, CA","Civil Engineering",1,1,8
+"Stanford, CA","Forestry and Sustainable Development",1,1,8
+"Stanford, CA","Electrical Engineering",1,1,8
+"Stanford, CA","Communications",1,1,8
+"Stanford, CA","Mechanical Engineering",1,1,8
+"Stanford, CA","Cardiology",1,1,8
+"Stanford, CA","Chemistry",1,1,8
+"Stanford, CA","Science, Technology, and Society",1,1,8
+"Berlin, Germany","History of Science",1,1,9
+"Berlin, Germany","Gender Medicine",1,1,9
+"Berlin, Germany","Gender and Diversity in Organizations",1,1,9
+"Maastricht, Netherlands","Informatics",1,1,10
+"Maastricht, Netherlands","Cardiology",1,1,10
+"Maastricht, Netherlands","Engineering",1,1,10
+"Maastricht, Netherlands","Sociology",1,1,10
+"Paris, France","Architecture and Urban Planning",1,1,11
+"Paris, France","Physics",1,1,11
+"Paris, France","Endocrinology",1,1,11
+"Paris, France","Medicine",1,1,11
+"Stanford, CA","History of Science",1,1,12
+"Stanford, CA","Biology",1,1,12
+"Cambridge, MA","Medicine",1,1,13
+"Brussels, Belgium","Architecture and Urban Planning",1,1,14
+"Maastricht, Netherlands","History of Science",1,1,15
+"Maastricht, Netherlands","Gender Medicine",1,1,15
+"Maastricht, Netherlands","Gender and Diversity in Organizations",1,1,15
+"Paris, France","Physiology",1,1,16
+"Stanford, CA","Medicine",1,1,17
+"Maastricht, Netherlands","Medicine",1,1,18
+"Madrid, Spain","Architecture and Urban Planning",1,1,19
+"Paris, France","History of Science",1,1,20
+"Paris, France","Gender Medicine",1,1,20
+"Paris, France","Gender and Diversity in Organizations",1,1,20
+"Brussels, Belgium","History of Science",1,1,21
+"Brussels, Belgium","Gender Medicine",1,1,21
+"Brussels, Belgium","Gender and Diversity in Organizations",1,1,21
+"Cambridge, MA","Architecture and Urban Planning",1,1,22
+"Madrid, Spain","History of Science",1,1,23
+"Madrid, Spain","Gender Medicine",1,1,23
+"Madrid, Spain","Gender and Diversity in Organizations",1,1,23
+"Cambridge, MA","History of Science",1,1,24
+"Cambridge, MA","Gender Medicine",1,1,24
+"Cambridge, MA","Gender and Diversity in Organizations",1,1,24
